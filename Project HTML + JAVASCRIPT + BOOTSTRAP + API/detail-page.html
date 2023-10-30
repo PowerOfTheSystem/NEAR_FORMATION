@@ -18,13 +18,23 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Sono:wght@200;300;400;500;700&display=swap"
         rel="stylesheet">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+
+    <link href="css/templatemo-pod-talk.css" rel="stylesheet">
 </head>
 
 <body>
 
     <main>
 
-        <nav class="navbar navbar-expand-lg" style="background-color: #03A9F4;">
+        <nav class="navbar navbar-expand-lg">
             <div class="container">
                 <a class="navbar-brand me-lg-5 me-0" href="index.html">
                     <img src="https://www.nearpartner.com/wp-content/uploads/2019/12/np_np_logo_positivo_horizontal-1.png"
@@ -73,84 +83,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         const movieId = urlParams.get('id');
 
-        // Movie details data
-        const movieDetails = {
-            "adult": false,
-            "backdrop_path": "/tmU7GeKVybMWFButWEGl2M4GeiP.jpg",
-            "belongs_to_collection": {
-                "id": 230,
-                "name": "The Godfather Collection",
-                "poster_path": "/zqV8MGXfpLZiFVObLxpAI7wWonJ.jpg",
-                "backdrop_path": "/3WZTxpgscsmoUk81TuECXdFOD0R.jpg"
-            },
-            "budget": 6000000,
-            "genres": [
-                {
-                    "id": 18,
-                    "name": "Drama"
-                },
-                {
-                    "id": 80,
-                    "name": "Crime"
-                }
-            ],
-            "homepage": "http://www.thegodfather.com/",
-            "id": 238,
-            "imdb_id": "tt0068646",
-            "original_language": "en",
-            "original_title": "The Godfather",
-            "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
-            "popularity": 136.073,
-            "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
-            "production_companies": [
-                {
-                    "id": 4,
-                    "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
-                    "name": "Paramount",
-                    "origin_country": "US"
-                },
-                {
-                    "id": 10211,
-                    "logo_path": null,
-                    "name": "Alfran Productions",
-                    "origin_country": "US"
-                }
-            ],
-            "production_countries": [
-                {
-                    "iso_3166_1": "US",
-                    "name": "United States of America"
-                }
-            ],
-            "release_date": "1972-03-14",
-            "revenue": 245066411,
-            "runtime": 175,
-            "spoken_languages": [
-                {
-                    "english_name": "English",
-                    "iso_639_1": "en",
-                    "name": "English"
-                },
-                {
-                    "english_name": "Italian",
-                    "iso_639_1": "it",
-                    "name": "Italiano"
-                },
-                {
-                    "english_name": "Latin",
-                    "iso_639_1": "la",
-                    "name": "Latin"
-                }
-            ],
-            "status": "Released",
-            "tagline": "An offer you can't refuse.",
-            "title": "The Godfather",
-            "video": false,
-            "vote_average": 8.706,
-            "vote_count": 18606
-        };
-
         function displayMovieDetails(movie) {
+
+            console.log("movie", movie);
+
             // Get a reference to the element where you want to display the movie details.
             const movieDetailsElement = document.getElementById('movie-details');
 
@@ -198,8 +134,35 @@
             movieDetailsElement.appendChild(movieDetailsDiv);
         }
 
-        // Call the displayMovieDetails function with the movie data.
-        displayMovieDetails(movieDetails);
+        // Authentication options for making API requests
+        const authenticationOptions = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZDc4YjM0NmE0NDEyM2ZiZDAzNDFhNTRhYjkxMzU1NyIsInN1YiI6IjY0YzEyNjMwZWRlMWIwMDEwMjQ1MDFlNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NPUUOYudD3y3HbXaMtkw6BIQXBuK2XDwrs0yFnOitqo'
+            }
+        };
+
+        // Fetch authentication information
+        fetch('https://api.themoviedb.org/3/authentication', authenticationOptions)
+            .then(response => response.json())
+            .then(response => console.log(response))
+            .catch(err => console.error(err));
+
+        // Options for making API request to fetch movie data
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZDc4YjM0NmE0NDEyM2ZiZDAzNDFhNTRhYjkxMzU1NyIsInN1YiI6IjY0YzEyNjMwZWRlMWIwMDEwMjQ1MDFlNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NPUUOYudD3y3HbXaMtkw6BIQXBuK2XDwrs0yFnOitqo'
+            }
+        };
+
+        // Fetch the details of the current movie
+        fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, options)
+            .then(response => response.json())
+            .then(response => displayMovieDetails(response))
+            .catch(err => console.error(err));
 
     </script>
     <script src="js/custom.js"></script>
